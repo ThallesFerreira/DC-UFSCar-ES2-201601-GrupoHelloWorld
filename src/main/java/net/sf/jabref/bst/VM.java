@@ -42,7 +42,7 @@ import net.sf.jabref.model.entry.BibEntry;
  * https://www.ctan.org/pkg/bibtex
  *
  */
-// test
+
 public class VM implements Warn {
 
     private static final Log LOGGER = LogFactory.getLog(VM.class);
