@@ -4,7 +4,11 @@
 
 Repositório para o trabalho prático do grupo Hello World na disciplina Engenharia de Software 2, do Departamento de Computação da Universidade Federal de São Carlos, ministrada pelo Prof. Fabiano Ferrari.
 
+O projeto consiste em realização de testes, implementação de itens de manutenção perfectiva especificados pelo professor, testes de regressão e evolução dos testes criados anteriormente, implementação de uma manutenção perfectiva definida pelo grupo, e reexecução dos testes de regressão e evolução dos mesmos. 
+
 # Descrição original do projeto JabRef
+
+A partir deste ponto, o conteúdo do arquivo README original do JabRef.
 
 # JabRef Development Version
 
