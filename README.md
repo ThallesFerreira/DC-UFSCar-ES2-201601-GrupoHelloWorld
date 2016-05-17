@@ -1,3 +1,11 @@
+# Engenharia de Software 2 - DC/UFSCar - 2016/1
+
+## Trabalho Prático
+
+Repositório para o trabalho prático do grupo Hello World na disciplina Engenharia de Software 2, do Departamento de Computação da Universidade Federal de São Carlos, ministrada pelo Prof. Fabiano Ferrari.
+
+# Descrição original do projeto JabRef
+
 # JabRef Development Version
 
 [![Build Status](https://travis-ci.org/JabRef/jabref.svg?branch=master)](https://travis-ci.org/JabRef/jabref)
