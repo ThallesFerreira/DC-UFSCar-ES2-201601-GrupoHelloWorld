@@ -36,6 +36,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.JOptionPane;
+
 import net.sf.jabref.model.database.BibDatabase;
 
 import com.google.common.base.Strings;
@@ -299,7 +301,11 @@ public class BibEntry {
     }
 
     public void setCiteKey(String newCiteKey) {
-        setField(KEY_FIELD, newCiteKey);
+        if ((newCiteKey.length() >= 2) && Character.isLetter(newCiteKey.charAt(0))) {
+            setField(KEY_FIELD, newCiteKey);
+        } else {
+            JOptionPane.showMessageDialog(null, "Bibtexkey must have 2 or more characters and star with a letter", "Bibtexkey error", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     public boolean hasCiteKey() {
