@@ -72,6 +72,19 @@ public class BibEntryWriterTest {
     }
 
     @Test
+    public void testeNovaEntradaSemTodosOsCamposObrigatoriosPreenchidos() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+        System.out.println(stringWriter);
+        BibEntry entry = new BibEntry("1234", "article");
+        // Não definido o campo obrigatório "autor"
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        assertEquals(stringWriter.toString(), "");
+        //        assertTrue(stringWriter.toString().equals(""));
+    }
+
+    @Test
     public void roundTripTest() throws IOException {
         // @formatter:off
         String bibtexEntry = "@Article{test," + Globals.NEWLINE +

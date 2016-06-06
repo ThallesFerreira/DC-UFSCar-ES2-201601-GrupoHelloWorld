@@ -1,1 +1,16 @@
 /bin/
+.classpath
+.gradle/2.12/taskArtifacts/cache.properties.lock
+.gradle/2.12/taskArtifacts/fileHashes.bin
+.gradle/2.12/taskArtifacts/outputFileStates.bin
+.gradle/2.12/taskArtifacts/fileSnapshots.bin
+.gradle/2.12/taskArtifacts/taskArtifacts.bin
+.settings/org.eclipse.jdt.ui.prefs
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.core.resources.prefs
+src/main/gen/net/sf/jabref/bst/BstLexer.java
+src/main/gen/net/sf/jabref/bst/BstParser.java
+src/main/gen/net/sf/jabref/search/SearchBaseVisitor.java
+src/main/gen/net/sf/jabref/search/SearchLexer.java
+src/main/gen/net/sf/jabref/search/SearchParser.java
+src/main/gen/net/sf/jabref/search/SearchVisitor.java
