@@ -42,6 +42,9 @@ import com.google.common.base.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+// Restauração do arquivo para seu estado original para resolver o conflito
+// Pacote que o Pedro criou foi mantido no projeto
+
 public class BibEntry {
     private static final Log LOGGER = LogFactory.getLog(BibEntry.class);
 
