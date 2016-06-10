@@ -650,18 +650,7 @@ public class ImportInspectionDialog extends JDialog implements ImportInspector, 
                             Globals.prefs.putBoolean(JabRefPreferences.WARN_ABOUT_DUPLICATES_IN_INSPECTION, false);
                         }
                         if (answer == JOptionPane.NO_OPTION) {
-                            // CREATE A NEW DATABASE WITH DUPLICATE OPTIONS
-                            CheckBoxMessage cbm1 = new CheckBoxMessage(
-                                    Localization
-                                            .lang("Do you want to create another database with the duplicate entries?"),
-                                    Localization.lang("Disable this confirmation dialog"), false);
-                            int answer1 = JOptionPane.showConfirmDialog(ImportInspectionDialog.this, cbm1,
-                                    Localization.lang("Test"), JOptionPane.OK_CANCEL_OPTION);
-                            if (answer1 == JOptionPane.OK_OPTION) {
-                                //GO TO DATABASE CREATION
-                            } else if (answer1 == JOptionPane.CANCEL_OPTION) {
-                                return;
-                            }
+                            return;
                         }
                         break;
                     }
