@@ -56,6 +56,9 @@ import net.sf.jabref.model.entry.BibEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+// thalles modified
+import net.sf.jabref.importer.fileformat.CommaSeparatedValues;
+
 public class ImportFormatReader {
 
     public static final String BIBTEX_FORMAT = "BibTeX";
@@ -88,6 +91,7 @@ public class ImportFormatReader {
         formats.add(new RepecNepImporter());
         formats.add(new RisImporter());
         formats.add(new SilverPlatterImporter());
+        formats.add(new CommaSeparatedValues());
 
         /**
          * Get custom import formats
