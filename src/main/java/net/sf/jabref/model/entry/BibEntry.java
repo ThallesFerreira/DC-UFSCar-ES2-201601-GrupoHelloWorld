@@ -3,12 +3,10 @@
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License along
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
@@ -36,11 +34,17 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.JOptionPane;
+
 import net.sf.jabref.model.database.BibDatabase;
 
 import com.google.common.base.Strings;
+import es2.trab.pedro.YearUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+// Restauração do arquivo para seu estado original para resolver o conflito
+// Pacote que o Pedro criou foi mantido no projeto
 
 public class BibEntry {
     private static final Log LOGGER = LogFactory.getLog(BibEntry.class);
@@ -190,14 +194,14 @@ public class BibEntry {
      * <p>
      * The following aliases are considered (old bibtex <-> new biblatex) based
      * on the BibLatex documentation, chapter 2.2.5:
-     * address 		<-> location
-     * annote			<-> annotation
-     * archiveprefix 	<-> eprinttype
-     * journal 		<-> journaltitle
-     * key				<-> sortkey
-     * pdf 			<-> file
-     * primaryclass 	<-> eprintclass
-     * school 			<-> institution
+     * address      <-> location
+     * annote           <-> annotation
+     * archiveprefix    <-> eprinttype
+     * journal      <-> journaltitle
+     * key              <-> sortkey
+     * pdf          <-> file
+     * primaryclass     <-> eprintclass
+     * school           <-> institution
      * These work bidirectional.
      * <p>
      * Special attention is paid to dates: (see the BibLatex documentation,
@@ -299,7 +303,12 @@ public class BibEntry {
     }
 
     public void setCiteKey(String newCiteKey) {
-        setField(KEY_FIELD, newCiteKey);
+        if ((newCiteKey.length() >= 2) && Character.isLetter(newCiteKey.charAt(0))) {
+            setField(KEY_FIELD, newCiteKey);
+        } else {
+            JOptionPane.showMessageDialog(null, "Bibtexkey must have 2 or more characters and star with a letter", "Bibtexkey error", JOptionPane.INFORMATION_MESSAGE);
+            clearField(KEY_FIELD);
+        }
     }
 
     public boolean hasCiteKey() {
@@ -336,7 +345,16 @@ public class BibEntry {
         if (BibEntry.ID_FIELD.equals(fieldName)) {
             throw new IllegalArgumentException("The field name '" + name + "' is reserved");
         }
-
+        /** Verify if year is valid when entry is an
+         *  "Article" or "Book"
+         */
+        if (type.equals("article") || type.equals("book")) {
+            if (name.equals("year")) {
+                if (!YearUtil.validate(value)) {
+                    value = "";
+                }
+            }
+        }
         changed = true;
 
         String oldValue = fields.get(fieldName);
