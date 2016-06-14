@@ -167,6 +167,52 @@ public class ImportMenuItem extends JMenuItem implements ActionListener {
             }
         }
 
+        public void addEntryNewDatabase(List<BibEntry> entries) {
+            final BasePanel panel = (BasePanel) frame.getTabbedPane().getSelectedComponent();
+            int duplicate = 0;
+            for (BibEntry entry : entries) {
+                if ((panel != null) && (DuplicateCheck
+                        .containsDuplicate(panel.getDatabase(), entry, panel.getBibDatabaseContext().getMode())
+                        .isPresent())) {
+                    entry.setGroupHit(true);
+                    //IF THE ENTRY IS DUPLICATE, ASK
+                    if (entry.isGroupHit()) {
+                        duplicate = 1;
+                    }
+                } else {
+                    ImportInspectionDialog diag = new ImportInspectionDialog(frame, panel, Localization.lang("Import"),
+                            openInNew);
+
+                    diag.addEntries(bibtexResult.getDatabase().getEntries());
+                    diag.entryListComplete();
+                    diag.setLocationRelativeTo(frame);
+                    diag.setVisible(true);
+                    diag.toFront();
+                }
+
+            }
+            if (duplicate == 1) {
+                CheckBoxMessage cbm1 = new CheckBoxMessage(
+                        Localization.lang("Do you want to create another database with the duplicate entries?"),
+                        Localization.lang("Disable this confirmation dialog"), false);
+                int answer = JOptionPane.showConfirmDialog(ImportMenuItem.this, cbm1, Localization.lang("New Database"),
+                        JOptionPane.YES_NO_OPTION);
+                if (answer == JOptionPane.YES_OPTION) {
+                    frame.addTab(bibtexResult.getDatabaseContext(), Globals.prefs.getDefaultEncoding(), true);
+                    frame.output(Localization.lang("New Database") + ": " + bibtexResult.getDatabase().getEntryCount());
+                } else if (answer == JOptionPane.NO_OPTION) {
+                    ImportInspectionDialog diag = new ImportInspectionDialog(frame, panel, Localization.lang("Import"),
+                            openInNew);
+
+                    diag.addEntries(bibtexResult.getDatabase().getEntries());
+                    diag.entryListComplete();
+                    diag.setLocationRelativeTo(frame);
+                    diag.setVisible(true);
+                    diag.toFront();
+                }
+            }
+        }
+
         @Override
         public void update() {
             if (!fileOk) {
@@ -195,59 +241,15 @@ public class ImportMenuItem extends JMenuItem implements ActionListener {
                             Localization.lang("Imported entries") + ": " + bibtexResult.getDatabase().getEntryCount());
                 } else {
                     // IF THE ENTRIES ARE DUPLICATED, GIVE THE OPTION OF CREATING A NEW DATABASE
-                    //IN ORDER TO CHECK THE DUPLICATIONS
-                    //
+                    // IN ORDER TO CHECK THE DUPLICATIONS
                     final List<BibEntry> entries;
-                    final BasePanel panel = (BasePanel) frame.getTabbedPane().getSelectedComponent();
                     entries = bibtexResult.getDatabase().getEntries();
-                    for (BibEntry entry : entries) {
-                        if ((panel != null) && (DuplicateCheck
-                                .containsDuplicate(panel.getDatabase(), entry, panel.getBibDatabaseContext().getMode())
-                                .isPresent())) {
-                            entry.setGroupHit(true);
-                            if (entry.isGroupHit()) {
-                                CheckBoxMessage cbm1 = new CheckBoxMessage(
-                                        Localization
-                                                .lang("Do you want to create another database with the duplicate entries?"),
-                                        Localization.lang("Disable this confirmation dialog"), false);
-                                int answer = JOptionPane.showConfirmDialog(ImportMenuItem.this, cbm1,
-                                        Localization.lang("New Database"), JOptionPane.YES_NO_OPTION);
-                                if (answer == JOptionPane.YES_OPTION) {
-
-                                    frame.addTab(bibtexResult.getDatabaseContext(), Globals.prefs.getDefaultEncoding(),
-                                            true);
-                                    frame.output(Localization.lang("New Database") + ": "
-                                            + bibtexResult.getDatabase().getEntryCount());
-
-                                } else if (answer == JOptionPane.NO_OPTION) {
-                                    ImportInspectionDialog diag = new ImportInspectionDialog(frame, panel,
-                                            Localization.lang("Import"), openInNew);
-
-                                    diag.addEntries(bibtexResult.getDatabase().getEntries());
-                                    diag.entryListComplete();
-                                    diag.setLocationRelativeTo(frame);
-                                    diag.setVisible(true);
-                                    diag.toFront();
-                                }
-                            }
-                        } else {
-                            ImportInspectionDialog diag = new ImportInspectionDialog(frame, panel,
-                                    Localization.lang("Import"), openInNew);
-
-                            diag.addEntries(bibtexResult.getDatabase().getEntries());
-                            diag.entryListComplete();
-                            diag.setLocationRelativeTo(frame);
-                            diag.setVisible(true);
-                            diag.toFront();
-                        }
-                    }
-
+                    addEntryNewDatabase(entries);
                 }
             }
             frame.unblock();
         }
     }
-
 
     private ParserResult mergeImportResults(List<ImportFormatReader.UnknownFormatImport> imports) {
         BibDatabase database = new BibDatabase();
