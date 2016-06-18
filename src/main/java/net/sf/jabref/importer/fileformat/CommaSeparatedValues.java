@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jabref.model.entry.BibEntry;
@@ -35,14 +36,18 @@ public class CommaSeparatedValues extends ImportFormat{
         BufferedReader in = new BufferedReader(ImportFormatReader.getReaderDefaultEncoding(stream));
 
         String line = in.readLine();
+        String[] fields = line.split(",");
+        line = in.readLine();
         while (line != null) {
             if (!"".equals(line.trim())) {
-                String[] fields = line.split(";");
                 BibEntry be = new BibEntry();
-                be.setType("TechReport");
-                be.setField("year", fields[0]);
-                be.setField("author", fields[1]);
-                be.setField("title", fields[2]);
+                int i = 1;
+                String[] info = line.split(",");
+                be.setType("Book");
+                for (String field : Arrays.copyOfRange(fields, 1, fields.length)) {
+                    be.setField(field, info[i]);
+                    i++;
+                }
                 bibitems.add(be);
                 line = in.readLine();
             }
