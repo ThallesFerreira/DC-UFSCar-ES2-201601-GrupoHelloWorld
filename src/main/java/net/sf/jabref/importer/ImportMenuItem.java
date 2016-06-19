@@ -37,10 +37,12 @@ import net.sf.jabref.gui.ImportInspectionDialog;
 import net.sf.jabref.gui.JabRefFrame;
 import net.sf.jabref.gui.ParserResultWarningDialog;
 import net.sf.jabref.gui.undo.NamedCompound;
+import net.sf.jabref.gui.util.component.CheckBoxMessage;
 import net.sf.jabref.gui.worker.AbstractWorker;
 import net.sf.jabref.importer.fileformat.ImportFormat;
 import net.sf.jabref.logic.l10n.Localization;
 import net.sf.jabref.logic.util.UpdateField;
+import net.sf.jabref.model.DuplicateCheck;
 import net.sf.jabref.model.database.BibDatabase;
 import net.sf.jabref.model.database.KeyCollisionException;
 import net.sf.jabref.model.entry.BibEntry;
@@ -56,7 +58,6 @@ public class ImportMenuItem extends JMenuItem implements ActionListener {
     private final boolean openInNew;
     private final ImportFormat importer;
     private IOException importError;
-
 
     public ImportMenuItem(JabRefFrame frame, boolean openInNew) {
         this(frame, openInNew, null);
@@ -166,6 +167,52 @@ public class ImportMenuItem extends JMenuItem implements ActionListener {
             }
         }
 
+        public void addEntryNewDatabase(List<BibEntry> entries) {
+            final BasePanel panel = (BasePanel) frame.getTabbedPane().getSelectedComponent();
+            int duplicate = 0;
+            for (BibEntry entry : entries) {
+                if ((panel != null) && (DuplicateCheck
+                        .containsDuplicate(panel.getDatabase(), entry, panel.getBibDatabaseContext().getMode())
+                        .isPresent())) {
+                    entry.setGroupHit(true);
+                    //IF THE ENTRY IS DUPLICATE, ASK
+                    if (entry.isGroupHit()) {
+                        duplicate = 1;
+                    }
+                } else {
+                    ImportInspectionDialog diag = new ImportInspectionDialog(frame, panel, Localization.lang("Import"),
+                            openInNew);
+
+                    diag.addEntries(bibtexResult.getDatabase().getEntries());
+                    diag.entryListComplete();
+                    diag.setLocationRelativeTo(frame);
+                    diag.setVisible(true);
+                    diag.toFront();
+                }
+
+            }
+            if (duplicate == 1) {
+                CheckBoxMessage cbm1 = new CheckBoxMessage(
+                        Localization.lang("Do you want to create another database with the duplicate entries?"),
+                        Localization.lang("Disable this confirmation dialog"), false);
+                int answer = JOptionPane.showConfirmDialog(ImportMenuItem.this, cbm1, Localization.lang("New Database"),
+                        JOptionPane.YES_NO_OPTION);
+                if (answer == JOptionPane.YES_OPTION) {
+                    frame.addTab(bibtexResult.getDatabaseContext(), Globals.prefs.getDefaultEncoding(), true);
+                    frame.output(Localization.lang("New Database") + ": " + bibtexResult.getDatabase().getEntryCount());
+                } else if (answer == JOptionPane.NO_OPTION) {
+                    ImportInspectionDialog diag = new ImportInspectionDialog(frame, panel, Localization.lang("Import"),
+                            openInNew);
+
+                    diag.addEntries(bibtexResult.getDatabase().getEntries());
+                    diag.entryListComplete();
+                    diag.setLocationRelativeTo(frame);
+                    diag.setVisible(true);
+                    diag.toFront();
+                }
+            }
+        }
+
         @Override
         public void update() {
             if (!fileOk) {
@@ -193,21 +240,16 @@ public class ImportMenuItem extends JMenuItem implements ActionListener {
                     frame.output(
                             Localization.lang("Imported entries") + ": " + bibtexResult.getDatabase().getEntryCount());
                 } else {
-                    final BasePanel panel = (BasePanel) frame.getTabbedPane().getSelectedComponent();
-
-                    ImportInspectionDialog diag = new ImportInspectionDialog(frame, panel, Localization.lang("Import"),
-                            openInNew);
-                    diag.addEntries(bibtexResult.getDatabase().getEntries());
-                    diag.entryListComplete();
-                    diag.setLocationRelativeTo(frame);
-                    diag.setVisible(true);
-                    diag.toFront();
+                    // IF THE ENTRIES ARE DUPLICATED, GIVE THE OPTION OF CREATING A NEW DATABASE
+                    // IN ORDER TO CHECK THE DUPLICATIONS
+                    final List<BibEntry> entries;
+                    entries = bibtexResult.getDatabase().getEntries();
+                    addEntryNewDatabase(entries);
                 }
             }
             frame.unblock();
         }
     }
-
 
     private ParserResult mergeImportResults(List<ImportFormatReader.UnknownFormatImport> imports) {
         BibDatabase database = new BibDatabase();
