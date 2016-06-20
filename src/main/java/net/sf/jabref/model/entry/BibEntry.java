@@ -39,7 +39,6 @@ import javax.swing.JOptionPane;
 import net.sf.jabref.model.database.BibDatabase;
 
 import com.google.common.base.Strings;
-import es2.trab.pedro.DigitalObjectIdentifierUtil;
 import es2.trab.pedro.YearUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -352,10 +351,6 @@ public class BibEntry {
         if (type.equals("article") || type.equals("book")) {
             if (name.equals("year")) {
                 if (!YearUtil.validate(value)) {
-                    value = "";
-                }
-            } else if (name.equals("doi")) {
-                if (!DigitalObjectIdentifierUtil.validate(value)) {
                     value = "";
                 }
             }
