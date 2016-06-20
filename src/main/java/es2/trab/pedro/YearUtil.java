@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 
 public class YearUtil {
 
-    private static final int OLDEST_POSSIBLE = 1950;
+    public static final int OLDEST_POSSIBLE = 1950;
 
     /**
      * @param year Year instance to be tested

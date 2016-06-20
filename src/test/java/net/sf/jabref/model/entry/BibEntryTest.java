@@ -26,4 +26,5 @@ public class BibEntryTest {
     public void notClearReservedFields() {
         entry.clearField(BibEntry.ID_FIELD);
     }
+
 }
