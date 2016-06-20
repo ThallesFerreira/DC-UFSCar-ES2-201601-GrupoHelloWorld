@@ -55,4 +55,9 @@ public class CommaSeparatedValues extends ImportFormat{
         return bibitems;
     }
 
+    @Override
+    public String getExtensions() {
+        return "csv";
+    }
+
 }
