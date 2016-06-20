@@ -18,3 +18,5 @@ src/main/gen/net/sf/jabref/search/SearchVisitor.java
 *.ucls
 
 uml/diagrama_completo.png
+
+.classpath
