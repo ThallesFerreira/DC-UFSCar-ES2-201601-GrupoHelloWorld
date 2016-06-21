@@ -1,20 +1,13 @@
 package es2.trab.pedro;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import java.util.GregorianCalendar;
 
 public class YearUtilTest {
 
     private int actual_year;
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
 
     @Before
     public void setUp() {
@@ -22,9 +15,8 @@ public class YearUtilTest {
     }
 
     @Test
-    public void testBelowBottomLimit() throws Exception {
+    public void testBelowBottomLimit() {
         Assert.assertFalse(YearUtil.validate(String.valueOf(YearUtil.OLDEST_POSSIBLE - 1)));
-        exception.expect(YearException.class);
     }
 
     @Test
@@ -48,8 +40,7 @@ public class YearUtilTest {
     }
 
     @Test
-    public void testAboveTopLimit() throws Exception {
+    public void testAboveTopLimit() {
         Assert.assertFalse(YearUtil.validate(String.valueOf(actual_year + 1)));
-        exception.expect(YearException.class);
     }
 }
