@@ -39,6 +39,7 @@ import javax.swing.JOptionPane;
 import net.sf.jabref.model.database.BibDatabase;
 
 import com.google.common.base.Strings;
+import es2.trab.pedro.DigitalObjectIdentifierUtil;
 import es2.trab.pedro.YearUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -345,12 +346,19 @@ public class BibEntry {
         if (BibEntry.ID_FIELD.equals(fieldName)) {
             throw new IllegalArgumentException("The field name '" + name + "' is reserved");
         }
-        /** Verify if year is valid when entry is an
-         *  "Article" or "Book"
+        /**
+         *  When entry is an "Article" or "Book"
          */
         if (type.equals("article") || type.equals("book")) {
+            // Verify if year is valid
             if (name.equals("year")) {
                 if (!YearUtil.validate(value)) {
+                    value = "";
+                }
+            }
+            // Verify if DOI is valid
+            if (name.equals("doi")) {
+                if (!DigitalObjectIdentifierUtil.validate(value)) {
                     value = "";
                 }
             }

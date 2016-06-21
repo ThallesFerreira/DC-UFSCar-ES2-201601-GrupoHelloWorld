@@ -23,8 +23,13 @@ public class YearUtil {
                 throw new YearException("Year value is invalid. Should be between " + top_limit + " and " + OLDEST_POSSIBLE);
             }
         } catch (YearException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Invalid Publication Year", JOptionPane.INFORMATION_MESSAGE);
+            alert(e);
             return false;
         }
+    }
+
+    protected static void alert(Exception e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Invalid Publication Year",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 }

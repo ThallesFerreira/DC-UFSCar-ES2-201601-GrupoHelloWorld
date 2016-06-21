@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class CSVImporterTest {
+public class CommaSeparatedValuesTest {
 
     private final String FILEFORMAT_PATH = "src/test/resources/net/sf/jabref/importer/fileformat";
 

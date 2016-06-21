@@ -35,8 +35,13 @@ public class DigitalObjectIdentifierUtil {
                         + "The suffix is assigned by the publisher and was designed to be flexible with publisher identification standards.");
             }
         } catch (DigitalObjectIdentifierException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Invalid Digital Object Identifier", JOptionPane.INFORMATION_MESSAGE);
+            alert(e);
             return false;
         }
+    }
+
+    protected static void alert(Exception e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Invalid Digital Object Identifier",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 }
