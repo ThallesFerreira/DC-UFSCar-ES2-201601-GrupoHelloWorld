@@ -100,6 +100,34 @@ public class BibtexEntryTests {
     }
 
     @Test
+    public void invalidCiteKey() {
+        BibEntry e = new BibEntry("id", BibtexEntryTypes.ARTICLE.getName());
+
+        e.setCiteKey("1");
+        Assert.assertFalse(e.hasCiteKey());
+
+        e.setCiteKey("12");
+        Assert.assertFalse(e.hasCiteKey());
+
+        e.clearField(BibEntry.KEY_FIELD);
+        Assert.assertFalse(e.hasCiteKey());
+    }
+
+    @Test
+    public void validCiteKey() {
+        BibEntry e = new BibEntry("id", BibtexEntryTypes.ARTICLE.getName());
+
+        e.setCiteKey("a1");
+        Assert.assertTrue(e.hasCiteKey());
+
+        e.setCiteKey("aa");
+        Assert.assertTrue(e.hasCiteKey());
+
+        e.clearField(BibEntry.KEY_FIELD);
+        Assert.assertFalse(e.hasCiteKey());
+    }
+
+    @Test
     public void typeOfBibEntryIsMiscAfterSettingToNullString() {
         Assert.assertEquals("article", keywordEntry.getType());
         keywordEntry.setType((String) null);
